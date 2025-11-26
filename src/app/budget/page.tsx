@@ -1,5 +1,4 @@
 'use client';
-'use client';
 
 import { useState, useEffect } from 'react';
 import { loadData, saveData, addCategory, AppData, Income, BudgetCategory } from '@/lib/storage';
@@ -15,21 +14,26 @@ export default function BudgetPage() {
     const [categories, setCategories] = useState<BudgetCategory[]>([]);
     const [newCategoryName, setNewCategoryName] = useState('');
 
+    const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success'>('idle');
+
     useEffect(() => {
         const loadedData = loadData();
         setData(loadedData);
         setCategories(loadedData.categories);
 
         // Pre-fill income if exists for current month (simplified logic for now)
-        // In a real app, we'd filter by month.
         const hIncome = loadedData.incomes.find(i => i.source === 'husband');
         const wIncome = loadedData.incomes.find(i => i.source === 'wife');
         if (hIncome) setHusbandIncome(hIncome.amount.toString());
         if (wIncome) setWifeIncome(wIncome.amount.toString());
     }, []);
 
-    const handleSave = () => {
+    const handleSave = async () => {
         if (!data) return;
+        setSaveStatus('saving');
+
+        // Simulate a small delay for better UX
+        await new Promise(resolve => setTimeout(resolve, 500));
 
         const newIncomes: Income[] = [];
         if (husbandIncome) {
@@ -51,15 +55,20 @@ export default function BudgetPage() {
 
         const newData = {
             ...data,
-            incomes: newIncomes, // Replace for now, in real app we append
+            incomes: newIncomes,
             categories: categories,
         };
 
+        console.log('Saving data:', newData);
         saveData(newData);
-        alert('保存しました！');
+        setSaveStatus('success');
+
+        // Reset success message after 3 seconds
+        setTimeout(() => setSaveStatus('idle'), 3000);
     };
 
     const handleCategoryChange = (id: string, amount: string) => {
+        console.log('Category change:', id, amount);
         setCategories(prev => prev.map(c =>
             c.id === id ? { ...c, allocated: Number(amount) } : c
         ));
@@ -172,12 +181,15 @@ export default function BudgetPage() {
                     </div>
                 </section>
 
-                <button
-                    onClick={handleSave}
-                    className={`btn-primary ${styles.saveButton}`}
-                >
-                    保存する
-                </button>
+                <div className={styles.footer}>
+                    <button
+                        onClick={handleSave}
+                        className={`btn-primary ${styles.saveButton}`}
+                        disabled={saveStatus === 'saving'}
+                    >
+                        {saveStatus === 'saving' ? '保存中...' : saveStatus === 'success' ? '保存しました！' : '保存する'}
+                    </button>
+                </div>
             </div>
         </div>
     );
