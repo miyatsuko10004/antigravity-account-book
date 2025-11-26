@@ -1,0 +1,138 @@
+.container {
+  min-height: 100vh;
+  padding: 1rem;
+  padding-bottom: 6rem;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  background: linear-gradient(to right, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: #94a3b8;
+  /* slate-400 */
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.summaryCard {
+  background: var(--surface);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  border-left-width: 4px;
+}
+
+.summaryLabel {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  margin-bottom: 0.25rem;
+}
+
+.summaryValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.navGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.navItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  transition: background-color 0.3s;
+}
+
+.navItem:hover {
+  background-color: rgba(30, 41, 59, 0.9);
+}
+
+.navTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.navDesc {
+  font-size: 0.875rem;
+  color: #94a3b8;
+}
+
+.navIcon {
+  font-size: 1.5rem;
+}
+
+.progressSection {
+  margin-top: 2rem;
+}
+
+.progressTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #cbd5e1;
+  /* slate-300 */
+}
+
+.progressItem {
+  background: rgba(30, 41, 59, 0.5);
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.progressBarBg {
+  height: 0.5rem;
+  background: #334155;
+  /* slate-700 */
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progressBarFill {
+  height: 100%;
+  border-radius: 9999px;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .container {
+    padding: 2rem;
+  }
+
+  .summaryGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
