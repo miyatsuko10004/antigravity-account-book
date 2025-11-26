@@ -14,14 +14,25 @@ export function middleware(req: NextRequest) {
     }
 
     if (basicAuth) {
-        const authValue = basicAuth.split(' ')[1];
-        const [user, pwd] = atob(authValue).split(':');
+        try {
+            const parts = basicAuth.split(' ');
+            if (parts.length === 2 && parts[0] === 'Basic') {
+                const authValue = parts[1];
+                const decoded = atob(authValue);
 
-        const validUser = process.env.BASIC_AUTH_USER;
-        const validPass = process.env.BASIC_AUTH_PASSWORD;
+                if (decoded.includes(':')) {
+                    const [user, pwd] = decoded.split(':');
+                    const validUser = process.env.BASIC_AUTH_USER;
+                    const validPass = process.env.BASIC_AUTH_PASSWORD;
 
-        if (user === validUser && pwd === validPass) {
-            return NextResponse.next();
+                    if (user && pwd && user === validUser && pwd === validPass) {
+                        return NextResponse.next();
+                    }
+                }
+            }
+        } catch (e) {
+            // Fall through to 401 on any parsing error
+            console.error('Basic Auth error:', e);
         }
     }
 
