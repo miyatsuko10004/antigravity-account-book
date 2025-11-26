@@ -1,8 +1,7 @@
 'use client';
-'use client';
 
 import { useState, useEffect } from 'react';
-import { loadData, saveData, AppData, Income, BudgetCategory } from '@/lib/storage';
+import { loadData, saveData, addCategory, AppData, Income, BudgetCategory } from '@/lib/storage';
 import { v4 as uuidv4 } from 'uuid';
 import Link from 'next/link';
 
@@ -13,6 +12,9 @@ export default function BudgetPage() {
     const [husbandIncome, setHusbandIncome] = useState<string>('');
     const [wifeIncome, setWifeIncome] = useState<string>('');
     const [categories, setCategories] = useState<BudgetCategory[]>([]);
+    const [newCategoryName, setNewCategoryName] = useState('');
+
+    const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success'>('idle');
 
     useEffect(() => {
         const loadedData = loadData();
@@ -20,15 +22,18 @@ export default function BudgetPage() {
         setCategories(loadedData.categories);
 
         // Pre-fill income if exists for current month (simplified logic for now)
-        // In a real app, we'd filter by month.
         const hIncome = loadedData.incomes.find(i => i.source === 'husband');
         const wIncome = loadedData.incomes.find(i => i.source === 'wife');
         if (hIncome) setHusbandIncome(hIncome.amount.toString());
         if (wIncome) setWifeIncome(wIncome.amount.toString());
     }, []);
 
-    const handleSave = () => {
+    const handleSave = async () => {
         if (!data) return;
+        setSaveStatus('saving');
+
+        // Simulate a small delay for better UX
+        await new Promise(resolve => setTimeout(resolve, 500));
 
         const newIncomes: Income[] = [];
         if (husbandIncome) {
@@ -50,18 +55,30 @@ export default function BudgetPage() {
 
         const newData = {
             ...data,
-            incomes: newIncomes, // Replace for now, in real app we append
+            incomes: newIncomes,
             categories: categories,
         };
 
+        console.log('Saving data:', newData);
         saveData(newData);
-        alert('保存しました！');
+        setSaveStatus('success');
+
+        // Reset success message after 3 seconds
+        setTimeout(() => setSaveStatus('idle'), 3000);
     };
 
     const handleCategoryChange = (id: string, amount: string) => {
+        console.log('Category change:', id, amount);
         setCategories(prev => prev.map(c =>
             c.id === id ? { ...c, allocated: Number(amount) } : c
         ));
+    };
+
+    const handleAddCategory = () => {
+        if (!newCategoryName.trim()) return;
+        const newCategory = addCategory(newCategoryName);
+        setCategories([...categories, newCategory]);
+        setNewCategoryName('');
     };
 
     const totalIncome = Number(husbandIncome || 0) + Number(wifeIncome || 0);
@@ -146,14 +163,33 @@ export default function BudgetPage() {
                             </div>
                         ))}
                     </div>
+
+                    <div className={styles.newCategoryForm}>
+                        <input
+                            type="text"
+                            value={newCategoryName}
+                            onChange={(e) => setNewCategoryName(e.target.value)}
+                            className="input-field"
+                            placeholder="新しい項目名"
+                        />
+                        <button
+                            onClick={handleAddCategory}
+                            className={`btn-primary ${styles.addCategoryButton}`}
+                        >
+                            追加
+                        </button>
+                    </div>
                 </section>
 
-                <button
-                    onClick={handleSave}
-                    className={`btn-primary ${styles.saveButton}`}
-                >
-                    保存する
-                </button>
+                <div className={styles.footer}>
+                    <button
+                        onClick={handleSave}
+                        className={`btn-primary ${styles.saveButton}`}
+                        disabled={saveStatus === 'saving'}
+                    >
+                        {saveStatus === 'saving' ? '保存中...' : saveStatus === 'success' ? '保存しました！' : '保存する'}
+                    </button>
+                </div>
             </div>
         </div>
     );
