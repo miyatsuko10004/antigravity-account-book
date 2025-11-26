@@ -74,13 +74,26 @@ export const addTransaction = (transaction: Omit<Transaction, 'id'>) => {
   const data = loadData();
   const newTransaction = { ...transaction, id: uuidv4() };
   data.transactions.push(newTransaction);
-  
+
   // Update category spent amount
   const category = data.categories.find(c => c.id === transaction.categoryId);
   if (category) {
     category.spent += transaction.amount;
   }
-  
+
   saveData(data);
   return newTransaction;
+};
+
+export const addCategory = (name: string) => {
+  const data = loadData();
+  const newCategory: BudgetCategory = {
+    id: uuidv4(),
+    name,
+    allocated: 0,
+    spent: 0,
+  };
+  data.categories.push(newCategory);
+  saveData(data);
+  return newCategory;
 };

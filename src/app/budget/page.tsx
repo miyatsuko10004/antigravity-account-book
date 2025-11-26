@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { loadData, saveData, AppData, Income, BudgetCategory } from '@/lib/storage';
+import { loadData, saveData, addCategory, AppData, Income, BudgetCategory } from '@/lib/storage';
 import { v4 as uuidv4 } from 'uuid';
 import Link from 'next/link';
 
@@ -13,6 +13,7 @@ export default function BudgetPage() {
     const [husbandIncome, setHusbandIncome] = useState<string>('');
     const [wifeIncome, setWifeIncome] = useState<string>('');
     const [categories, setCategories] = useState<BudgetCategory[]>([]);
+    const [newCategoryName, setNewCategoryName] = useState('');
 
     useEffect(() => {
         const loadedData = loadData();
@@ -62,6 +63,13 @@ export default function BudgetPage() {
         setCategories(prev => prev.map(c =>
             c.id === id ? { ...c, allocated: Number(amount) } : c
         ));
+    };
+
+    const handleAddCategory = () => {
+        if (!newCategoryName.trim()) return;
+        const newCategory = addCategory(newCategoryName);
+        setCategories([...categories, newCategory]);
+        setNewCategoryName('');
     };
 
     const totalIncome = Number(husbandIncome || 0) + Number(wifeIncome || 0);
@@ -145,6 +153,22 @@ export default function BudgetPage() {
                                 </div>
                             </div>
                         ))}
+                    </div>
+
+                    <div className={styles.newCategoryForm}>
+                        <input
+                            type="text"
+                            value={newCategoryName}
+                            onChange={(e) => setNewCategoryName(e.target.value)}
+                            className="input-field"
+                            placeholder="新しい項目名"
+                        />
+                        <button
+                            onClick={handleAddCategory}
+                            className={`btn-primary ${styles.addCategoryButton}`}
+                        >
+                            追加
+                        </button>
                     </div>
                 </section>
 

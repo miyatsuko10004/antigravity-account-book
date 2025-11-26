@@ -1,8 +1,26 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Antigravity Account Book
 
-## Getting Started
+Web上で確認可能な家計簿アプリ。毎月の収入を予算に振り分け、日々の支出を記録し、将来の貯金をシミュレーションできます。
 
-First, run the development server:
+## 特徴
+
+- **ダッシュボード**: 家計の全体像（収入、支出、残高）を一目で確認。
+- **予算設定**: 毎月の収入を登録し、各カテゴリー（食費、家賃など）に予算を振り分け。
+- **取引履歴**: 日々の支出を記録し、カテゴリーごとの残高をリアルタイムで確認。
+- **貯金シミュレーション**: 現在のペースで貯金した場合の1年後、5年後、10年後の資産推移を予測。
+- **レスポンシブデザイン**: スマホ、タブレット、PCのいずれでも快適に利用可能。
+- **データ保存**: データはブラウザのLocalStorageに保存されるため、会員登録不要ですぐに使えます。
+
+## 技術スタック
+
+- **Framework**: [Next.js](https://nextjs.org) (App Router)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: Vanilla CSS (CSS Modules)
+- **Deployment**: Vercel (Recommended)
+
+## 始め方
+
+開発サーバーを起動して、ローカルでアプリを確認します。
 
 ```bash
 npm run dev
@@ -10,27 +28,32 @@ npm run dev
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+ブラウザで [http://localhost:3000](http://localhost:3000) を開いてください。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 無料で公開する方法
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+このアプリケーションは Next.js で構築されており、以下のプラットフォームで簡単に**無料**で公開できます。
 
-## Learn More
+### 1. Vercel (推奨)
+Next.jsの開発元であるVercelが提供するプラットフォームです。最も相性が良く、設定不要でデプロイできます。
 
-To learn more about Next.js, take a look at the following resources:
+1. [Vercel](https://vercel.com/signup)のアカウントを作成。
+2. GitHubなどのGitリポジトリにこのプロジェクトをプッシュ。
+3. Vercelのダッシュボードで「Add New...」→「Project」を選択。
+4. リポジトリを選択して「Deploy」をクリック。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 2. Netlify
+Vercelと同様に人気のあるホスティングサービスです。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. [Netlify](https://www.netlify.com/)のアカウントを作成。
+2. Gitリポジトリを連携。
+3. ビルド設定（Build command: `npm run build`, Publish directory: `.next` または `out`）を確認してデプロイ。
 
-## Deploy on Vercel
+### 3. Render
+Webサービスや静的サイトをホストできるプラットフォームです。
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. [Render](https://render.com/)のアカウントを作成。
+2. 「New +」→「Static Site」または「Web Service」を選択。
+3. リポジトリを連携してデプロイ。
